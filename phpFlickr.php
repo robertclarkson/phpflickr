@@ -480,7 +480,14 @@ if ( !class_exists('phpFlickr') ) {
 					if ( is_null($data) ) {
 						unset($args[$key]);
 					} else {
-						$auth_sig .= $key . $data;
+						if (is_array($data)) {
+							$auth_sig .= $key . $data['_content'];
+							unset($args[$key]);
+							$args[$key] = $data['_content'];
+						}
+						else {
+							$auth_sig .= $key . $data;
+						}
 					}
 				}
 				if (!empty($this->secret)) {
@@ -489,7 +496,7 @@ if ( !class_exists('phpFlickr') ) {
 				}
 
 				$photo = realpath($photo);
-				$args['photo'] = '@' . $photo;
+				$args['photo'] = new CURLFile($photo, 'image/jpeg');//'@'.$photo;//
 
 
 				$curl = curl_init($this->upload_endpoint);
@@ -499,8 +506,8 @@ if ( !class_exists('phpFlickr') ) {
 				$response = curl_exec($curl);
 				$this->response = $response;
 				curl_close($curl);
-
 				$rsp = explode("\n", $response);
+
 				foreach ($rsp as $line) {
 					if (preg_match('/<err code="([0-9]+)" msg="(.*)"/', $line, $match)) {
 						if ($this->die_on_error)
@@ -550,7 +557,7 @@ if ( !class_exists('phpFlickr') ) {
 				}
 
 				$photo = realpath($photo);
-				$args['photo'] = '@' . $photo;
+				$args['photo'] = new CURLFile($photo, 'image/jpeg');
 
 
 				$curl = curl_init($this->replace_endpoint);
