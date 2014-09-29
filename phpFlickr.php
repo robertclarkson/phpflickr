@@ -225,6 +225,7 @@ if ( !class_exists('phpFlickr') ) {
 				curl_setopt($curl, CURLOPT_POST, true);
 				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 				$response = curl_exec($curl);
 				curl_close($curl);
 			} else {
@@ -303,7 +304,7 @@ if ( !class_exists('phpFlickr') ) {
 				$this->cache($args, $this->response);
 			}
 
-
+			print_r($this->response);
 			/*
 			 * Uncomment this line (and comment out the next one) if you're doing large queries
 			 * and you're concerned about time.  This will, however, change the structure of
@@ -434,6 +435,7 @@ if ( !class_exists('phpFlickr') ) {
 				curl_setopt($curl, CURLOPT_POST, true);
 				curl_setopt($curl, CURLOPT_POSTFIELDS, $args);
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 				$response = curl_exec($curl);
 				$this->response = $response;
 				curl_close($curl);
@@ -498,11 +500,12 @@ if ( !class_exists('phpFlickr') ) {
 				$photo = realpath($photo);
 				$args['photo'] = new CURLFile($photo, 'image/jpeg');//'@'.$photo;//
 
-
+				print_r($args);
 				$curl = curl_init($this->upload_endpoint);
 				curl_setopt($curl, CURLOPT_POST, true);
 				curl_setopt($curl, CURLOPT_POSTFIELDS, $args);
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 				$response = curl_exec($curl);
 				$this->response = $response;
 				curl_close($curl);
